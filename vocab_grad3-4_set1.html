@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Listening & Vocabulary – Minimal Pairs (G3) • Pink + Examples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF7FB; --card:#FFFFFF; --ink:#1A1A1A; --muted:#666;
+    --brand:#EC4899; --brand2:#F472B6; --accent:#F9A8D4;
+    --ok:#22C55E; --bad:#EF4444;
+    --shadow:0 8px 22px rgba(0,0,0,.08); --radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; background:var(--bg); color:var(--ink);
+        font-family:"Prompt",sans-serif; display:flex; justify-content:center;
+        min-height:100vh; padding:24px; }
+  .app{ width:min(980px,100%); }
+  .brand{ display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:18px; }
+  .logo{ width:70px; height:70px; border-radius:50%;
+         background:linear-gradient(135deg,var(--brand),var(--brand2));
+         box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center;
+         color:white; font:700 26px Fredoka; }
+  .title{ font:700 26px "Fredoka",sans-serif; color:var(--brand) }
+  .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px; }
+  .hero{text-align:center}
+  h1{ font:700 clamp(22px,4.2vw,32px) "Fredoka"; margin:6px 0 10px; color:var(--brand) }
+  p.lead{ color:var(--muted); font-size:18px }
+  .btn{ cursor:pointer; border:none; border-radius:14px; padding:12px 16px; font:700 16px "Fredoka"; transition:.2s }
+  .btn.primary{ background:linear-gradient(135deg,var(--brand),var(--brand2)); color:white; box-shadow:0 6px 15px rgba(236,72,153,.35) }
+  .btn.secondary{ background:#fff; color:var(--brand); border:2px solid var(--brand) }
+  .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+  input[type=text]{ width:320px; padding:14px; border-radius:14px; border:2px solid #F3E0EC; font-size:18px; }
+  input[type=text]:focus{ outline:none; border-color:var(--brand) }
+  .badge{ background:#FCE7F3; color:var(--brand); padding:6px 12px; border-radius:999px; font-weight:600 }
+  .vocab-grid{ display:grid; gap:12px; grid-template-columns:repeat(2,minmax(320px,1fr)); }
+  @media(max-width:720px){ .vocab-grid{ grid-template-columns:1fr } }
+  .vitem{ border:2px solid #F8E7F1; border-radius:14px; padding:14px; background:#fff; }
+  .vhead{ display:flex; justify-content:space-between; gap:8px; align-items:center; margin-bottom:8px; }
+  .vterm{ font-weight:700; color:#111 }
+  .vth{ color:#C026D3; font-size:14px }
+  .ex{ color:#666; font-size:14px; margin-top:2px }
+  .ex i{ color:#444 }
+  .btn.sound{ padding:6px 10px; border-radius:10px }
+  .choices{ display:grid; gap:12px }
+  .choice{ padding:14px; border:2px solid #F3E0EC; border-radius:14px; font:600 18px "Prompt"; cursor:pointer; transition:.2s; background:#fff }
+  .choice.correct{ border-color:var(--ok); background:#E8F8EE }
+  .choice.wrong{ border-color:var(--bad); background:#FEE2E2 }
+  .reveal{ display:none; margin-top:12px; border:2px dashed #F3E0EC; border-radius:14px; padding:12px; background:#FFF }
+  .score{ font:700 20px Fredoka; color:#DB2777 }
+  .timer{ font:700 20px Fredoka; color:#DB2777 }
+  .seg{ display:inline-flex; border:2px solid #F3A0C8; border-radius:999px; overflow:hidden }
+  .seg button{ border:none; background:#fff; color:#B0266A; padding:8px 12px; font:700 14px Fredoka; }
+  .seg button.active{ background:#FCE7F3; color:#8A1D57 }
+  .switch{ display:inline-flex; align-items:center; gap:8px; }
+  .switch input{ width:42px; height:22px; appearance:none; background:#F3A0C8; border-radius:999px; position:relative; outline:none; cursor:pointer }
+  .switch input::after{ content:""; position:absolute; width:18px; height:18px; background:#fff; border-radius:50%; top:2px; left:2px; transition:.2s }
+  .switch input:checked::after{ left:22px }
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="brand">
+      <div class="logo">KP</div>
+      <div class="title">Kru Pai Classroom</div>
+    </div>
+
+    <!-- Page 1: Name Entry -->
+    <section id="namePage" class="card hero">
+      <h1>🎀 Listening & Vocabulary – Minimal Pairs (G3)</h1>
+      <p class="lead">ใส่ชื่อเล่น → ทบทวนคำศัพท์ (มีเสียงอ่าน + ประโยคตัวอย่าง) → ทำแบบทดสอบฟังเลือกคำ ⏱️ 10 วินาที/ข้อ</p>
+      <div class="row" style="justify-content:center; margin-top:10px">
+        <input id="playerName" type="text" placeholder="Nickname / ชื่อเล่น" />
+        <button class="btn primary" onclick="goVocab()">👉 ไปหน้าทบทวนคำศัพท์</button>
+      </div>
+    </section>
+
+    <!-- Page 2: Vocabulary Review -->
+    <section id="vocabPage" class="card" style="display:none">
+      <div class="row" style="justify-content:space-between">
+        <span class="badge">Vocabulary Review • 20 Groups × 3 Words</span>
+        <div class="row">
+          <!-- speed control -->
+          <div class="seg" id="speedSeg">
+            <button onclick="setRate(0.55)" id="spSlow">Slow</button>
+            <button onclick="setRate(0.70)" id="spNorm" class="active">Normal</button>
+            <button onclick="setRate(0.90)" id="spFast">Fast</button>
+          </div>
+          <!-- shuffle toggle -->
+          <label class="switch">
+            <input type="checkbox" id="shuffleToggle" checked />
+            <span>Shuffle Questions</span>
+          </label>
+          <button class="btn secondary" onclick="startQuiz()">▶️ เริ่มทำแบบทดสอบ</button>
+        </div>
+      </div>
+      <p style="margin:8px 0 14px; color:#555">แตะ 🔊 เพื่อฟังคำศัพท์ภาษาอังกฤษ อ่านคำแปลไทย และดูประโยคตัวอย่างสั้น ๆ ชัด ๆ</p>
+      <div id="vocabList" class="vocab-grid"></div>
+      <div style="margin-top:12px" class="row">
+        <button class="btn primary" onclick="startQuiz()">▶️ เริ่มทำแบบทดสอบ</button>
+      </div>
+    </section>
+
+    <!-- Page 3: Quiz -->
+    <section id="quizPage" class="card" style="display:none">
+      <div class="row" style="justify-content:space-between">
+        <span class="badge" id="progress">Q 1/20</span>
+        <span class="score" id="playerLabel">Player</span>
+        <span class="score" id="score">Score 0</span>
+        <span class="timer" id="timer">10</span>
+        <div class="row">
+          <!-- speed control also available in quiz -->
+          <div class="seg" id="speedSeg2">
+            <button onclick="setRate(0.55)" id="sp2Slow">Slow</button>
+            <button onclick="setRate(0.70)" id="sp2Norm" class="active">Normal</button>
+            <button onclick="setRate(0.90)" id="sp2Fast">Fast</button>
+          </div>
+          <button class="btn secondary" onclick="listenTarget()">🔊 Listen</button>
+        </div>
+      </div>
+      <p style="margin:8px 0; color:#555">ฟังคำที่อ่าน แล้วเลือกคำที่ตรงกับเสียง (ทีละข้อ)</p>
+      <div id="choices" class="choices"></div>
+      <div id="revealBox" class="reveal">
+        <b>Answer:</b> <span id="revealText"></span>
+        <div id="revealTH" class="vth"></div>
+      </div>
+      <div id="feedback" style="font:700 18px Fredoka; margin-top:10px"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="nextBtn" class="btn secondary" onclick="nextQ()" style="display:none">➡️ Next</button>
+        <button id="restartBtn" class="btn secondary" onclick="restart()" style="display:none">🔁 Restart</button>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section id="resultPage" class="card hero" style="display:none">
+      <h1 id="finalTitle">Well done!</h1>
+      <p class="score" id="finalScore">Final Score 0/20</p>
+      <div class="row" style="justify-content:center">
+        <button class="btn secondary" onclick="restart()">🔁 Play Again</button>
+      </div>
+      <div class="brandfoot">© Kru Pai Classroom</div>
+    </section>
+  </div>
+
+<script>
+  // -------- Data: each word now has en, th, exEn, exTh --------
+  const groups = [
+    [
+      {en:"white", th:"สีขาว", exEn:"The cat is white.", exTh:"แมวตัวนี้สีขาว"},
+      {en:"write", th:"เขียน", exEn:"I write my name.", exTh:"ฉันเขียนชื่อตัวเอง"},
+      {en:"why", th:"ทำไม", exEn:"Why are you happy?", exTh:"ทำไมเธอถึงมีความสุข"}
+    ],
+    [
+      {en:"watch", th:"นาฬิกาข้อมือ/ดู", exEn:"I watch a cartoon.", exTh:"ฉันดูการ์ตูน"},
+      {en:"what", th:"อะไร", exEn:"What is this?", exTh:"นี่คืออะไร"},
+      {en:"vote", th:"โหวต", exEn:"We vote for a leader.", exTh:"พวกเราโหวตหาผู้นำ"}
+    ],
+    [
+      {en:"ship", th:"เรือ", exEn:"The ship is big.", exTh:"เรือลำนี้ใหญ่"},
+      {en:"sheep", th:"แกะ", exEn:"A sheep eats grass.", exTh:"แกะกินหญ้า"},
+      {en:"cheap", th:"ราคาถูก", exEn:"This pen is cheap.", exTh:"ปากกาด้ามนี้ราคาถูก"}
+    ],
+    [
+      {en:"pen", th:"ปากกา", exEn:"I have a blue pen.", exTh:"ฉันมีปากกาสีน้ำเงิน"},
+      {en:"pan", th:"กระทะ", exEn:"The pan is hot.", exTh:"กระทะร้อน"},
+      {en:"pain", th:"ความเจ็บปวด", exEn:"I feel pain in my knee.", exTh:"ฉันเจ็บหัวเข่า"}
+    ],
+    [
+      {en:"sit", th:"นั่ง", exEn:"Please sit down.", exTh:"กรุณานั่งลง"},
+      {en:"seat", th:"ที่นั่ง", exEn:"Your seat is near the window.", exTh:"ที่นั่งของเธออยู่ใกล้หน้าต่าง"},
+      {en:"sheet", th:"แผ่น/กระดาษ", exEn:"Take one sheet of paper.", exTh:"หยิบกระดาษหนึ่งแผ่น"}
+    ],
+    [
+      {en:"cat", th:"แมว", exEn:"The cat likes milk.", exTh:"แมวชอบนม"},
+      {en:"cut", th:"ตัด", exEn:"We cut the paper.", exTh:"พวกเราตัดกระดาษ"},
+      {en:"cart", th:"รถเข็น/รถลาก", exEn:"Push the cart slowly.", exTh:"เข็นรถเข็นช้า ๆ"}
+    ],
+    [
+      {en:"bed", th:"เตียง", exEn:"The bed is soft.", exTh:"เตียงนุ่ม"},
+      {en:"bad", th:"แย่", exEn:"The weather is bad.", exTh:"อากาศแย่"},
+      {en:"bat", th:"ค้างคาว", exEn:"A bat sleeps in a cave.", exTh:"ค้างคาวนอนในถ้ำ"}
+    ],
+    [
+      {en:"full", th:"เต็ม", exEn:"The glass is full.", exTh:"แก้วเต็มแล้ว"},
+      {en:"fool", th:"คนโง่", exEn:"Don’t be a fool.", exTh:"อย่าโง่นะ"},
+      {en:"fall", th:"ตก", exEn:"Leaves fall in autumn.", exTh:"ใบไม้ร่วงในฤดูใบไม้ร่วง"}
+    ],
+    [
+      {en:"map", th:"แผนที่", exEn:"Open the map.", exTh:"เปิดแผนที่"},
+      {en:"nap", th:"งีบ", exEn:"I take a nap.", exTh:"ฉันงีบสักพัก"},
+      {en:"mop", th:"ไม้ถูพื้น", exEn:"Use a mop to clean.", exTh:"ใช้ไม้ถูพื้นทำความสะอาด"}
+    ],
+    [
+      {en:"fan", th:"พัดลม", exEn:"Turn on the fan.", exTh:"เปิดพัดลม"},
+      {en:"fun", th:"สนุก", exEn:"The game is fun.", exTh:"เกมนี้สนุก"},
+      {en:"phone", th:"โทรศัพท์", exEn:"Answer the phone, please.", exTh:"กรุณารับโทรศัพท์"}
+    ],
+    [
+      {en:"rice", th:"ข้าว", exEn:"We eat rice every day.", exTh:"พวกเรากินข้าวทุกวัน"},
+      {en:"rise", th:"ขึ้น/เพิ่มขึ้น", exEn:"Prices rise this year.", exTh:"ราคาสูงขึ้นปีนี้"},
+      {en:"right", th:"ขวา/ถูกต้อง", exEn:"That answer is right.", exTh:"คำตอบนั้นถูกต้อง"}
+    ],
+    [
+      {en:"park", th:"สวนสาธารณะ", exEn:"We play at the park.", exTh:"เราเล่นที่สวนสาธารณะ"},
+      {en:"pork", th:"เนื้อหมู", exEn:"He doesn’t eat pork.", exTh:"เขาไม่กินเนื้อหมู"},
+      {en:"perk", th:"ผลประโยชน์พิเศษ", exEn:"A free snack is a perk.", exTh:"ขนมฟรีเป็นสวัสดิการเล็ก ๆ"}
+    ],
+    [
+      {en:"light", th:"แสง/ไฟ", exEn:"Turn off the light.", exTh:"ปิดไฟ"},
+      {en:"like", th:"ชอบ", exEn:"I like apples.", exTh:"ฉันชอบแอปเปิล"},
+      {en:"late", th:"สาย", exEn:"Don’t be late.", exTh:"อย่าสายนะ"}
+    ],
+    [
+      {en:"ship", th:"เรือ", exEn:"A ship sails at night.", exTh:"เรือแล่นตอนกลางคืน"},
+      {en:"shop", th:"ร้านค้า", exEn:"The shop opens at ten.", exTh:"ร้านค้าเปิดสิบโมง"},
+      {en:"shock", th:"ช็อก/ตกใจ", exEn:"The news gave me a shock.", exTh:"ข่าวนั้นทำให้ฉันตกใจ"}
+    ],
+    [
+      {en:"fit", th:"พอดี", exEn:"The shoes fit well.", exTh:"รองเท้าพอดีดี"},
+      {en:"feet", th:"เท้า (ทั้งสอง)", exEn:"Wash your feet.", exTh:"ล้างเท้าของเธอ"},
+      {en:"feed", th:"ให้อาหาร", exEn:"We feed the fish.", exTh:"พวกเราให้อาหารปลา"}
+    ],
+    [
+      {en:"top", th:"ด้านบน/ยอด", exEn:"Climb to the top.", exTh:"ปีนไปด้านบน"},
+      {en:"tap", th:"ก๊อกน้ำ/แตะ", exEn:"Turn off the tap.", exTh:"ปิดก๊อกน้ำ"},
+      {en:"tip", th:"ปลาย/ทิป", exEn:"The tip of the pen is sharp.", exTh:"ปลายปากกาคม"}
+    ],
+    [
+      {en:"ball", th:"ลูกบอล", exEn:"Kick the ball.", exTh:"เตะลูกบอล"},
+      {en:"bell", th:"กระดิ่ง", exEn:"Ring the bell.", exTh:"สั่นกระดิ่ง"},
+      {en:"bill", th:"ใบแจ้งหนี้/บิล", exEn:"Pay the bill, please.", exTh:"กรุณาจ่ายบิล"}
+    ],
+    [
+      {en:"man", th:"ผู้ชาย", exEn:"The man is tall.", exTh:"ผู้ชายนั้นตัวสูง"},
+      {en:"men", th:"ผู้ชายหลายคน", exEn:"The men are teachers.", exTh:"ผู้ชายเหล่านั้นเป็นครู"},
+      {en:"main", th:"หลัก/สำคัญ", exEn:"Use the main door.", exTh:"ใช้ประตูหลัก"}
+    ],
+    [
+      {en:"coat", th:"เสื้อโค้ท", exEn:"Wear a warm coat.", exTh:"สวมเสื้อโค้ทอุ่น ๆ"},
+      {en:"court", th:"ศาล/สนาม", exEn:"They play on the court.", exTh:"พวกเขาเล่นในสนาม"},
+      {en:"cut", th:"ตัด", exEn:"Cut the paper in half.", exTh:"ตัดกระดาษครึ่งหนึ่ง"}
+    ],
+    [
+      {en:"sing", th:"ร้องเพลง", exEn:"We sing together.", exTh:"พวกเราร้องเพลงด้วยกัน"},
+      {en:"thing", th:"สิ่งของ", exEn:"Put that thing here.", exTh:"วางสิ่งนั้นตรงนี้"},
+      {en:"thin", th:"ผอมบาง", exEn:"The book is thin.", exTh:"หนังสือเล่มนี้บาง"}
+    ]
+  ];
+
+  // -------- State --------
+  let player = "";
+  let order = [...Array(groups.length).keys()];
+  let i = 0;                  // pointer in order[]
+  let score = 0;
+  let targetWord = null;      // {en, th, exEn, exTh}
+  let options = [];           // current 3 options (shuffled)
+  let answered = false;
+  let timeLeft = 10;
+  let timerInterval = null;
+  let speechRate = 0.70;      // default Normal
+
+  const el = {
+    namePage: document.getElementById('namePage'),
+    vocabPage: document.getElementById('vocabPage'),
+    quizPage: document.getElementById('quizPage'),
+    resultPage: document.getElementById('resultPage'),
+    vocabList: document.getElementById('vocabList'),
+    playerName: document.getElementById('playerName'),
+    playerLabel: document.getElementById('playerLabel'),
+    progress: document.getElementById('progress'),
+    score: document.getElementById('score'),
+    timer: document.getElementById('timer'),
+    choices: document.getElementById('choices'),
+    feedback: document.getElementById('feedback'),
+    nextBtn: document.getElementById('nextBtn'),
+    restartBtn: document.getElementById('restartBtn'),
+    revealBox: document.getElementById('revealBox'),
+    revealText: document.getElementById('revealText'),
+    revealTH: document.getElementById('revealTH'),
+    finalTitle: document.getElementById('finalTitle'),
+    finalScore: document.getElementById('finalScore'),
+    shuffleToggle: document.getElementById('shuffleToggle'),
+    speedSeg: document.getElementById('speedSeg'),
+    speedSeg2: document.getElementById('speedSeg2')
+  };
+
+  // -------- Navigation --------
+  function goVocab(){
+    player = (el.playerName.value || "").trim();
+    if(!player){ alert("ใส่ชื่อเล่นก่อนน้า 🙏"); return; }
+    el.namePage.style.display = 'none';
+    buildVocab();
+    el.vocabPage.style.display = 'block';
+  }
+
+  function startQuiz(){
+    score = 0; i = 0;
+    order = [...Array(groups.length).keys()];
+    if(el.shuffleToggle.checked){ shuffle(order); }
+    el.vocabPage.style.display = 'none';
+    el.quizPage.style.display = 'block';
+    el.playerLabel.textContent = "Player: " + player;
+    loadQ();
+  }
+
+  function restart(){
+    speechSynthesis.cancel(); clearInterval(timerInterval);
+    el.resultPage.style.display = 'none';
+    el.namePage.style.display = 'block';
+  }
+
+  // -------- Speed control --------
+  function setRate(r){
+    speechRate = r;
+    // toggle active state both segments
+    document.querySelectorAll('#speedSeg button, #speedSeg2 button').forEach(b=>b.classList.remove('active'));
+    const pick = (r===0.55)? ['#spSlow','#sp2Slow'] : (r===0.70)? ['#spNorm','#sp2Norm'] : ['#spFast','#sp2Fast'];
+    pick.forEach(sel => { const btn = document.querySelector(sel); if(btn) btn.classList.add('active'); });
+  }
+
+  // -------- Vocab rendering (now includes examples) --------
+  function buildVocab(){
+    el.vocabList.innerHTML = "";
+    groups.forEach((grp, idx)=>{
+      const box = document.createElement('div');
+      box.className = 'vitem';
+
+      const head = document.createElement('div');
+      head.className = 'vhead';
+      head.innerHTML = `<div class="vterm">Group ${idx+1}</div>
+                        <div class="row">
+                          ${grp.map(w=>`<button class="btn secondary sound" onclick="speak('${w.en}', speechRate)">🔊 ${w.en}</button>`).join('')}
+                        </div>`;
+      box.appendChild(head);
+
+      // three lines: word + TH + example
+      grp.forEach(w=>{
+        const line = document.createElement('div');
+        line.innerHTML = `<div class="vterm">${w.en} <span class="vth">(${w.th})</span></div>
+                          <div class="ex"><i>${w.exEn}</i> — ${w.exTh}</div>`;
+        box.appendChild(line);
+      });
+
+      el.vocabList.appendChild(box);
+    });
+  }
+
+  // -------- Quiz logic --------
+  function loadQ(){
+    answered = false;
+    const groupIdx = order[i];
+    const grp = groups[groupIdx];
+
+    // progress + score
+    el.progress.textContent = `Q ${i+1}/${groups.length}`;
+    el.score.textContent = `Score ${score}`;
+
+    // clear UI
+    el.choices.innerHTML = '';
+    el.feedback.textContent = '';
+    hideReveal();
+
+    // pick target within group (random 1 ใน 3 คำ)
+    const idx = Math.floor(Math.random()*3);
+    targetWord = grp[idx];
+
+    // build options & shuffle choices
+    options = grp.map(w => ({...w}));
+    shuffle(options);
+
+    // render choice buttons
+    options.forEach((opt)=>{
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = opt.en;
+      b.onclick = ()=> choose(opt);
+      el.choices.appendChild(b);
+    });
+
+    startTimer();
+    listenTarget();
+  }
+
+  function listenTarget(){ speak(targetWord.en, speechRate); }
+
+  function choose(opt){
+    if(answered) return;
+    answered = true; clearInterval(timerInterval);
+
+    const buttons = [...document.querySelectorAll('.choice')];
+    const correctIndex = options.findIndex(o=>o.en===targetWord.en);
+    buttons.forEach(b => b.disabled = true);
+
+    if(opt.en === targetWord.en){
+      buttons[correctIndex].classList.add('correct');
+      el.feedback.innerHTML = `<span style="color:var(--ok)">✅ Correct!</span>`;
+      score += 1; el.score.textContent = `Score ${score}`;
+    }else{
+      const selectedIndex = options.findIndex(o=>o.en===opt.en);
+      buttons[selectedIndex].classList.add('wrong');
+      buttons[correctIndex].classList.add('correct');
+      el.feedback.innerHTML = `<span style="color:var(--bad)">❌ Try again!</span>`;
+    }
+
+    revealAnswer();
+    el.nextBtn.style.display = (i<groups.length-1)? 'inline-block':'none';
+    el.restartBtn.style.display = (i===groups.length-1)? 'inline-block':'none';
+    if(i===groups.length-1){ showResultSoon(); }
+  }
+
+  function startTimer(){
+    clearInterval(timerInterval);
+    timeLeft = 10;
+    el.timer.textContent = timeLeft;
+    timerInterval = setInterval(()=>{
+      timeLeft--;
+      el.timer.textContent = timeLeft;
+      if(timeLeft<=0){
+        clearInterval(timerInterval);
+        if(!answered){ timeUp(); }
+      }
+    },1000);
+  }
+
+  function timeUp(){
+    answered = true;
+    const buttons = [...document.querySelectorAll('.choice')];
+    const correctIndex = options.findIndex(o=>o.en===targetWord.en);
+    buttons.forEach(b => b.disabled = true);
+    buttons[correctIndex].classList.add('correct');
+    el.feedback.innerHTML = `<span style="color:var(--bad)">⏰ Time up!</span>`;
+    revealAnswer();
+    el.nextBtn.style.display = (i<groups.length-1)? 'inline-block':'none';
+    el.restartBtn.style.display = (i===groups.length-1)? 'inline-block':'none';
+    if(i===groups.length-1){ showResultSoon(); }
+  }
+
+  function nextQ(){
+    i++;
+    if(i<groups.length){ loadQ(); } else { showResult(); }
+  }
+
+  function revealAnswer(){
+    el.revealText.textContent = targetWord.en;
+    el.revealTH.textContent = targetWord.th;
+    el.revealBox.style.display = 'block';
+  }
+  function hideReveal(){
+    el.revealBox.style.display = 'none';
+    el.revealText.textContent = '';
+    el.revealTH.textContent = '';
+  }
+
+  function showResultSoon(){ setTimeout(showResult, 700); }
+  function showResult(){
+    el.quizPage.style.display = 'none';
+    el.resultPage.style.display = 'block';
+    el.finalTitle.textContent = `Great job, ${player}!`;
+    el.finalScore.textContent = `Final Score ${score}/${groups.length}`;
+  }
+
+  // -------- Utilities --------
+  function speak(text, rate){
+    try{
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = rate || 0.7;
+      speechSynthesis.speak(u);
+    }catch(e){ console.warn(e); }
+  }
+  function shuffle(arr){
+    for(let m=arr.length-1;m>0;m--){
+      const n = Math.floor(Math.random()*(m+1));
+      [arr[m], arr[n]] = [arr[n], arr[m]];
+    }
+    return arr;
+  }
+
+  // default speed UI state
+  setRate(0.70);
+</script>
+</body>
+</html>
